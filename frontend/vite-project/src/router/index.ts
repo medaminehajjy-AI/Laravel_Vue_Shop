@@ -1,21 +1,21 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
-import Login from '../Components/Auth/Login.vue';
-import Register from '../Components/Auth/Register.vue';
-import AuthDebug from '../Components/AuthDebug.vue';
-import Home from '../Components/Home.vue';
-import About from '../Components/About.vue';
-import Contact from '../Components/Contact.vue';
-import ProductDetails from '../Components/ProductDetails.vue';
-import Cart from '../Components/Cart.vue';
-import Checkout from '../Components/Checkout.vue';
-import CategoryProducts from '../Components/CategoryProducts.vue';
-import AdminLayout from '../Components/Admin/AdminLayout.vue';
-import Dashboard from '../Components/Admin/Dashboard.vue';
-import ProductManagement from '../Components/Admin/ProductManagement.vue';
-import Orders from '../Components/Admin/Orders.vue';
-import Categories from '../Components/Admin/Categories.vue';
-import Messages from '../Components/Admin/Messages.vue';
+import Login from '../components/Auth/Login.vue';
+import Register from '../components/Auth/Register.vue';
+import AuthDebug from '../components/AuthDebug.vue';
+import Home from '../components/Home.vue';
+import About from '../components/About.vue';
+import Contact from '../components/Contact.vue';
+import ProductDetails from '../components/ProductDetails.vue';
+import Cart from '../components/Cart.vue';
+import Checkout from '../components/Checkout.vue';
+import CategoryProducts from '../components/CategoryProducts.vue';
+import AdminLayout from '../components/Admin/AdminLayout.vue';
+import Dashboard from '../components/Admin/Dashboard.vue';
+import ProductManagement from '../components/Admin/ProductManagement.vue';
+import Orders from '../components/Admin/Orders.vue';
+import Categories from '../components/Admin/Categories.vue';
+import Messages from '../components/Admin/Messages.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -45,7 +45,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes
+    routes  : routes
 });
 
 export default router;
