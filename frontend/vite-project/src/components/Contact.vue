@@ -128,7 +128,7 @@ export default {
     async submitForm() {
       this.loading = true;
       try {
-        const res = await axios.post('/api/contact', this.form);
+        const res = await api.post('/contact', this.form);
         alert(res.data.message);
         this.form = { name:'', email:'', subject:'', message:'' };
       } catch (err) {

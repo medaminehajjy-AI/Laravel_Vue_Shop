@@ -79,11 +79,11 @@ export default {
     async fetchCategories() {
       this.loading = true;
       try {
-        const response = await api.get('/api/categories');
+        const response = await api.get('/categories');
         this.categories = response.data;
         for (let cat of this.categories) {
           try {
-            const prodResponse = await api.get('/api/products');
+            const prodResponse = await api.get('/products');
             cat.products_count = prodResponse.data.data.filter(p => p.category_id === cat.id).length;
           } catch {
             cat.products_count = 0;
@@ -110,9 +110,9 @@ export default {
       
       try {
         if (this.editingCategory) {
-          await api.put(`/api/categories/${this.editingCategory.id}`, this.form);
+          await api.put(`/categories/${this.editingCategory.id}`, this.form);
         } else {
-          await api.post('/api/categories', this.form);
+          await api.post('/categories', this.form);
         }
         this.closeForm();
         this.fetchCategories();
@@ -128,7 +128,7 @@ export default {
       if (!confirm('Are you sure you want to delete this category?')) return;
       
       try {
-        await api.delete(`/api/categories/${id}`);
+        await api.delete(`/categories/${id}`);
         this.fetchCategories();
       } catch (error) {
         console.error('Failed to delete category:', error);

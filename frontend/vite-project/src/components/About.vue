@@ -11,7 +11,7 @@
           <ShoppingBag :size="40" />
         </div>
         <h2>Our Mission</h2>
-        <p>At MiniShop, we believe in providing the best quality products at the most affordable prices. Our mission is to make online shopping simple, secure, and enjoyable for everyone.</p>
+        <p>At Mol-Lmli7Shop, we believe in providing the best quality products at the most affordable prices. Our mission is to make online shopping simple, secure, and enjoyable for everyone.</p>
       </div>
       
       <div class="section">

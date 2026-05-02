@@ -1,4 +1,4 @@
-import api from '../services/api';
+import { api, authAxios } from '../services/api';
 import axios from 'axios';
 
 export function useAuthDebug() {
@@ -14,7 +14,7 @@ export function useAuthDebug() {
     async function debugStep2_GetCSRFCookie() {
         console.log('=== STEP 2: Get CSRF Cookie ===');
         try {
-            const response = await api.get('/sanctum/csrf-cookie');
+            const response = await authAxios.get('/sanctum/csrf-cookie');
             console.log('CSRF Cookie Response:', response);
             console.log('All Cookies After CSRF:', document.cookie);
             
@@ -38,7 +38,7 @@ export function useAuthDebug() {
         console.log('Current Cookies Before Login:', document.cookie);
         
         try {
-            const response = await api.post('/api/login', { 
+            const response = await authAxios.post('/login', { 
                 email, 
                 password 
             });
@@ -70,7 +70,7 @@ export function useAuthDebug() {
         console.log('Cookies Before Auth Check:', document.cookie);
         
         try {
-            const response = await api.get('/api/user');
+            const response = await api.get('/user');
             console.log('Auth Check Success:', response.data);
             return { 
                 success: true, 
@@ -100,7 +100,7 @@ export function useAuthDebug() {
         if (xsrfCookie) {
             try {
                 const response = await axios.post(
-                    'http://127.0.0.1:8000/api/login',
+                    'http://127.0.0.1:8000/login',
                     { email: 'test@test.com', password: 'test' },
                     {
                         headers: {

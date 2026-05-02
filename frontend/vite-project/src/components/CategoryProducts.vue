@@ -57,8 +57,8 @@ export default {
       loading.value = true;
       try {
         const [catResponse, prodResponse] = await Promise.all([
-          api.get(`/api/categories/${categoryId}`),
-          api.get('/api/home-products')
+          api.get(`/categories/${categoryId}`),
+          api.get('/home-products')
         ]);
         category.value = catResponse.data;
         const allProducts = prodResponse.data.data;
@@ -72,9 +72,9 @@ export default {
 
     const addToCart = async (productId) => {
       try {
-        await api.post('/api/cart', { product_id: productId, quantity: 1 });
+        await api.post('/cart', { product_id: productId, quantity: 1 });
         
-        const countResponse = await api.get('/api/cart/count');
+        const countResponse = await api.get('/cart/count');
         window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: countResponse.data.count || 0 }));
         
         alert('Product added to cart!');

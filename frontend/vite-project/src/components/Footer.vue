@@ -48,7 +48,7 @@ export default {
 
     const fetchCategories = async () => {
       try {
-        const response = await api.get('/api/categories');
+        const response = await api.get('/categories');
         categories.value = response.data;
       } catch (error) {
         categories.value = [];

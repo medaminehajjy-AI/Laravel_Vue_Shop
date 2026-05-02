@@ -89,7 +89,7 @@ export default {
     const fetchCart = async () => {
       loading.value = true;
       try {
-        const response = await api.get('/api/cart');
+        const response = await api.get('/cart');
         cartItems.value = response.data;
       } catch (error) {
         console.error('Failed to fetch cart:', error);
@@ -112,7 +112,7 @@ export default {
       if (item.quantity >= item.product?.stock) return;
       
       try {
-        await api.put(`/api/cart/${item.id}`, { quantity: item.quantity + 1 });
+        await api.put(`/cart/${item.id}`, { quantity: item.quantity + 1 });
         item.quantity++;
       } catch (error) {
         console.error('Failed to update quantity:', error);
@@ -123,7 +123,7 @@ export default {
       if (item.quantity <= 1) return;
       
       try {
-        await api.put(`/api/cart/${item.id}`, { quantity: item.quantity - 1 });
+        await api.put(`/cart/${item.id}`, { quantity: item.quantity - 1 });
         item.quantity--;
       } catch (error) {
         console.error('Failed to update quantity:', error);
@@ -134,7 +134,7 @@ export default {
       if (!confirm('Are you sure you want to remove this item?')) return;
       
       try {
-        await api.delete(`/api/cart/${id}`);
+        await api.delete(`/cart/${id}`);
         cartItems.value = cartItems.value.filter(item => item.id !== id);
         window.dispatchEvent(new CustomEvent('cart-count-updated', {
           detail: cartItems.value.length

@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import api from '../services/api';
+import { api, authAxios } from '../services/api';
 
 const user = ref(null);
 const loading = ref(false);
@@ -11,7 +11,7 @@ export function useAuth() {
 
     async function fetchUser() {
         try {
-            const response = await api.get('/api/user');
+            const response = await api.get('/user');
             user.value = response.data;
             console.log('fetchUser success:', user.value);
             return user.value;
@@ -25,7 +25,8 @@ export function useAuth() {
     async function login(email, password) {
         loading.value = true;
         try {
-            const response = await api.post('/login', { email, password });
+            await authAxios.get('/sanctum/csrf-cookie');
+            const response = await authAxios.post('/login', { email, password });
             const newUser = await fetchUser();
             return { success: true, user: newUser };
         } catch (error) {
@@ -41,7 +42,8 @@ export function useAuth() {
     async function register(name, email, password, password_confirmation) {
         loading.value = true;
         try {
-            const response = await api.post('/register', { name, email, password, password_confirmation });
+            await authAxios.get('/sanctum/csrf-cookie');
+            const response = await authAxios.post('/register', { name, email, password, password_confirmation });
             const newUser = await fetchUser();
             return { success: true, user: newUser };
         } catch (error) {
@@ -58,7 +60,8 @@ export function useAuth() {
     async function logout() {
         loading.value = true;
         try {
-            await api.post('/logout');
+            await authAxios.get('/sanctum/csrf-cookie');
+            await authAxios.post('/logout');
         } catch (error) {
             console.error('Logout error:', error);
         } finally {

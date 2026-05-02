@@ -188,7 +188,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { watch } from 'vue';
 import { ref, computed, onMounted, watchEffect } from 'vue';
 import { useAuth } from '../composables/useAuth';
@@ -241,7 +240,7 @@ export default {
         return;
       }
       try {
-        const response = await api.get('/api/cart/count');
+        const response = await api.get('/cart/count');
         cartCount.value = response.data.count || 0;
       } catch (e) {
         cartCount.value = 0;
@@ -285,7 +284,7 @@ export default {
   // debounce to avoid too many requests
   searchTimeout = setTimeout(async () => {
     try {
-      const res = await api.get('/api/products/search', {
+      const res = await api.get('/products/search', {
         params: { q: newVal }
       });
       searchResults.value = res.data; // assuming API returns array of products
@@ -306,7 +305,7 @@ export default {
 
     const fetchUnreadOrders = async () => {
       try {
-        const res = await api.get('/api/admin/orders/unread-count');
+        const res = await api.get('/admin/orders/unread-count');
         unreadCount.value = res.data.count || 0;
       } catch (e) {
         unreadCount.value = 0;
@@ -314,7 +313,7 @@ export default {
     };
     const fetchUnreadMessages = async () => {
         try {
-          const res = await axios.get('/api/messages/unread-count');
+          const res = await api.get('/messages/unread-count');
           unreadMessages.value = res.data;
         } catch (err) {
           console.error(err);
@@ -340,7 +339,7 @@ export default {
 
     const handleNotificationClick = async () => {
       try {
-        await api.post('/api/admin/orders/mark-as-read');
+        await api.post('/admin/orders/mark-as-read');
         unreadCount.value = 0;
       } catch (error) {
         console.error('Failed to mark orders as read:', error);

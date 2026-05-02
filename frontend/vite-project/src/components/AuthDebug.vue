@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import api from '../services/api';
+import { api, authAxios } from '../services/api';
 
 export default {
   name: 'AuthDebug',
@@ -117,7 +117,7 @@ export default {
       
       try {
         console.log('=== Getting CSRF cookie ===');
-        const response = await api.get('/sanctum/csrf-cookie');
+        const response = await authAxios.get('/sanctum/csrf-cookie');
         
         this.testResults.csrf = {
           success: true,
@@ -149,7 +149,7 @@ export default {
         console.log('=== Testing login ===');
         console.log('Cookies before login:', this.getAllCookies());
         
-        const response = await api.post('/login', {
+        const response = await authAxios.post('/login', {
           email: this.testEmail,
           password: this.testPassword
         });
@@ -185,7 +185,7 @@ export default {
         console.log('=== Testing auth check ===');
         console.log('Cookies before auth check:', this.getAllCookies());
         
-        const response = await api.get('/api/user');
+        const response = await api.get('/user');
         
         this.testResults.auth = {
           success: true,

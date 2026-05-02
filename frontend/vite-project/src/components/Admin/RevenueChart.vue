@@ -13,7 +13,7 @@ const chartCanvas = ref(null)
 
 onMounted(async () => {
   try {
-    const response = await api.get('/api/admin/revenue-chart')
+    const response = await api.get('/admin/revenue-chart')
 
     const data = response.data
     const labels = data.map(item => item.date)

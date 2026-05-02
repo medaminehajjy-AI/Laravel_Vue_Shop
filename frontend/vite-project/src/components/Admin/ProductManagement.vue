@@ -252,7 +252,7 @@ export default {
         if (this.filters.min_price) params.min_price = this.filters.min_price;
         if (this.filters.max_price) params.max_price = this.filters.max_price;
         
-        const response = await api.get('/api/products', { params });
+        const response = await api.get('/products', { params });
         this.products = response.data.data;
         this.pagination = {
           current_page: response.data.current_page,
@@ -282,7 +282,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await api.get('/api/categories');
+        const response = await api.get('/categories');
         this.categories = response.data;
       } catch (error) {
         console.error('Failed to fetch categories:', error);
@@ -330,11 +330,11 @@ export default {
       
       try {
         if (this.editingProduct) {
-          await api.post(`/api/products/${this.editingProduct.id}?_method=PUT`, formData, {
+          await api.post(`/products/${this.editingProduct.id}?_method=PUT`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
         } else {
-          await api.post('/api/products', formData, {
+          await api.post('/products', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
         }
@@ -352,7 +352,7 @@ export default {
       if (!confirm('Are you sure you want to delete this product?')) return;
       
       try {
-        await api.delete(`/api/products/${id}`);
+        await api.delete(`/products/${id}`);
         this.fetchProducts();
       } catch (error) {
         console.error('Failed to delete product:', error);

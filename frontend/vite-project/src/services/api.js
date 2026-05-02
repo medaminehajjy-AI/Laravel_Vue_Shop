@@ -1,10 +1,20 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+// Main API instance - for routes under /api/*
 const api = axios.create({
-    baseURL,
+    baseURL: `${API_BASE}/api`,
+    withCredentials: true,
+    xsrfCookieName: 'XSRF-TOKEN',
+    withXSRFToken: true,
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+});
+
+// Auth instance - for web routes (/login, /register, /logout, /sanctum/csrf-cookie)
+const authAxios = axios.create({
+    baseURL: API_BASE,
     withCredentials: true,
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -17,7 +27,7 @@ async function refreshCsrfToken() {
         return csrfPromise;
     }
 
-    csrfPromise = axios.get(`${baseURL}/sanctum/csrf-cookie`, {
+    csrfPromise = authAxios.get('/sanctum/csrf-cookie', {
         withCredentials: true,
     }).then(() => {
         return Cookies.get('XSRF-TOKEN');
@@ -29,6 +39,19 @@ async function refreshCsrfToken() {
 }
 
 api.interceptors.request.use(async (config) => {
+    if (['post', 'put', 'delete', 'patch'].includes(config.method)) {
+        await refreshCsrfToken();
+    }
+
+    const token = Cookies.get('XSRF-TOKEN');
+    if (token) {
+        config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
+    }
+
+    return config;
+});
+
+authAxios.interceptors.request.use(async (config) => {
     if (['post', 'put', 'delete', 'patch'].includes(config.method)) {
         await refreshCsrfToken();
     }
@@ -66,4 +89,26 @@ api.interceptors.response.use(
     }
 );
 
+authAxios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        if ((error.response?.status === 419) && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                await refreshCsrfToken();
+                originalRequest.headers['X-XSRF-TOKEN'] = Cookies.get('XSRF-TOKEN');
+                return authAxios(originalRequest);
+            } catch (csrfError) {
+                console.error('CSRF refresh failed:', csrfError);
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
+
+export { api, authAxios, refreshCsrfToken };
 export default api;

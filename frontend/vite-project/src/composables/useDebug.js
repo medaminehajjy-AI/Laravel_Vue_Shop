@@ -1,9 +1,9 @@
-import api from '../services/api';
+import { api, authAxios } from '../services/api';
 
 export function useDebug() {
     async function checkCSRF() {
         try {
-            const response = await api.get('/api/debug/csrf');
+            const response = await api.get('/debug/csrf');
             console.log('CSRF Debug Info:', response.data);
             return response.data;
         } catch (error) {
@@ -14,7 +14,7 @@ export function useDebug() {
 
     async function checkAuth() {
         try {
-            const response = await api.get('/api/debug/auth');
+            const response = await api.get('/debug/auth');
             console.log('Auth Debug Info:', response.data);
             return response.data;
         } catch (error) {
@@ -27,10 +27,10 @@ export function useDebug() {
         console.log('Testing login with:', email);
         
         try {
-            await api.get('/sanctum/csrf-cookie');
+            await authAxios.get('/sanctum/csrf-cookie');
             console.log('CSRF cookie set');
             
-            const loginResponse = await api.post('/api/login', { email, password });
+            const loginResponse = await authAxios.post('/login', { email, password });
             console.log('Login successful:', loginResponse.data);
             
             return { success: true, data: loginResponse.data };
@@ -45,7 +45,7 @@ export function useDebug() {
         console.log('Testing /api/user endpoint...');
         
         try {
-            const response = await api.get('/api/user');
+            const response = await api.get('/user');
             console.log('User data:', response.data);
             return { authenticated: true, user: response.data };
         } catch (error) {

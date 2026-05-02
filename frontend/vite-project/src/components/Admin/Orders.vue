@@ -94,7 +94,7 @@ export default {
     async fetchOrders(page = 1) {
       this.loading = true;
       try {
-        const response = await api.get(`/api/admin/orders?page=${page}`);
+        const response = await api.get(`/admin/orders?page=${page}`);
         this.orders = response.data.data;          // actual orders
         this.currentPage = response.data.current_page;
         this.lastPage = response.data.last_page;
@@ -106,7 +106,7 @@ export default {
     },
     async updateStatus(orderId, newStatus) {
       try {
-        await api.put(`/api/admin/orders/${orderId}`, { status: newStatus });
+        await api.put(`/admin/orders/${orderId}`, { status: newStatus });
         const order = this.orders.find(o => o.id === orderId);
         if (order) {
           order.status = newStatus;
@@ -132,7 +132,7 @@ export default {
     },
     async markAsRead() {
       try {
-        await api.post('/api/admin/orders/mark-as-read');
+        await api.post('/admin/orders/mark-as-read');
       } catch (error) {
         console.error('Failed to mark orders as read:', error);
       }

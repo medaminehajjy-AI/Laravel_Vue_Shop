@@ -79,7 +79,7 @@ export default {
     const fetchProduct = async (id) => {
       loading.value = true;
       try {
-        const response = await api.get(`/api/products/${id}`);
+        const response = await api.get(`/products/${id}`);
         product.value = response.data;
       } catch (error) {
         console.error('Failed to fetch product:', error);
@@ -104,12 +104,12 @@ export default {
         return;
       }
       try {
-        await api.post('/api/cart', { 
+        await api.post('/cart', { 
           product_id: product.value.id, 
           quantity: quantity.value 
         });
         
-        const countResponse = await api.get('/api/cart/count');
+        const countResponse = await api.get('/cart/count');
         window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: countResponse.data.count || 0 }));
         
         alert('Product added to cart!');

@@ -115,7 +115,7 @@ export default {
     const fetchCart = async () => {
       loading.value = true;
       try {
-        const response = await api.get('/api/cart');
+        const response = await api.get('/cart');
         cartItems.value = response.data;
       } catch (error) {
         console.error('Failed to fetch cart:', error);
@@ -142,7 +142,7 @@ export default {
       
       processing.value = true;
       try {
-        const response = await api.post('/api/checkout', {
+        const response = await api.post('/checkout', {
           phone: phone.value,
           shipping_address: shippingAddress.value,
           notes: notes.value,

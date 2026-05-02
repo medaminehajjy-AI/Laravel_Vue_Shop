@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\TestLoginController;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 Route::get('/', function () {
-    return view('welcome');
+    return "API running";
 });
 
 

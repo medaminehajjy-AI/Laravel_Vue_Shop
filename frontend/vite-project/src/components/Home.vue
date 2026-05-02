@@ -111,7 +111,7 @@ export default {
     const fetchProducts = async (page = 1) => {
       loading.value = true;
       try {
-        const response = await api.get('/api/home-products', {
+        const response = await api.get('/home-products', {
           params: { page: page }
         });
         console.log("API RESPONSE:", response.data);
@@ -174,7 +174,7 @@ export default {
 
     const fetchCategories = async () => {
       try {
-        const response = await api.get('/api/categories');
+        const response = await api.get('/categories');
         categories.value = response.data;
       } catch (error) {
         console.error('Failed to fetch categories:', error);
@@ -193,9 +193,9 @@ export default {
 
         try {
           await api.get('/sanctum/csrf-cookie');
-          await api.post('/api/cart', { product_id: productId, quantity: 1 });
+          await api.post('/cart', { product_id: productId, quantity: 1 });
 
-          const countResponse = await api.get('/api/cart/count');
+          const countResponse = await api.get('/cart/count');
           window.dispatchEvent(new CustomEvent('cart-count-updated', {
             detail: countResponse.data.count || 0
           }));

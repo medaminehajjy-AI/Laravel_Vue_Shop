@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../../services/api';
 
 export default {
   name: 'Messages',
@@ -65,7 +65,7 @@ export default {
     async fetchMessages(page = 1) {
       this.loading = true;
       try {
-        const res = await axios.get(`/api/messages?page=${page}`);
+        const res = await api.get(`/messages?page=${page}`);
         this.messages = res.data.data;
         this.currentPage = res.data.current_page;
         this.lastPage = res.data.last_page;
@@ -79,7 +79,7 @@ export default {
     async markAsRead(msg) {
       if (!msg.is_read) {
         try {
-          await axios.post(`/api/messages/${msg.id}/read`);
+          await api.post(`/messages/${msg.id}/read`);
           msg.is_read = true;
         } catch (error) {
           console.error('Failed to mark message as read:', error);

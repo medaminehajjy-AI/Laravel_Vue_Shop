@@ -123,7 +123,7 @@ export default {
     async fetchStats() {
       this.loading = true;
       try {
-        const response = await api.get('/api/admin/stats');
+        const response = await api.get('/admin/stats');
         this.stats = response.data;
       } catch (error) {
         console.error('Failed to fetch stats:', error);
@@ -133,7 +133,7 @@ export default {
     },
     async fetchRecentOrders() {
       try {
-        const response = await api.get('/api/admin/recent-orders');
+        const response = await api.get('/admin/recent-orders');
         this.recentOrders = response.data;
       } catch (error) {
         console.error('Failed to fetch recent orders:', error);

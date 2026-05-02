@@ -25,7 +25,7 @@ watch(user, async (newUser) => {
   if (!chartCanvas.value) return
 
   try {
-    const response = await api.get('/api/admin/top-products')
+    const response = await api.get('/admin/top-products')
 
     const labels = response.data.map(item => item.name)
     const values = response.data.map(item => Number(item.total))
