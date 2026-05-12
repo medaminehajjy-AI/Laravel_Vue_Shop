@@ -12,9 +12,19 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\API\MessageController;
 
+
+
+
+Route::get('/test123', function () {
+    return 'HELLO_FROM_NEW_DEPLOYMENT';
+});
+
 Route::get('/cors-debug', function () {
     return response()->json(['cors' => 'ok']);
 });
+
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
