@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\API\MessageController;
 
+Route::get('/cors-debug', function () {
+    return response()->json([
+        'cors' => 'test',
+    ]);
+});
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
