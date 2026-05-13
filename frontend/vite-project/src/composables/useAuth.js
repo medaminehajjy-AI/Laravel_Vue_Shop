@@ -16,7 +16,11 @@ export function useAuth() {
             console.log('fetchUser success:', user.value);
             return user.value;
         } catch (error) {
-            user.value = null;
+            // IMPORTANT
+                if (error.response?.status === 401) {
+                    user.value = null;
+                    return;
+                }
             console.log('fetchUser failed:', error.response?.status);
             return null;
         }

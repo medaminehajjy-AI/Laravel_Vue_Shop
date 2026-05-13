@@ -252,17 +252,23 @@ export default {
     onMounted(async () => {
       await fetchUser();
 
-      if (user.value) {
-        fetchCartCount();
+      // stop here if not logged in
+      if (!user.value) {
+        return;
       }
 
+      // logged in only
+      fetchCartCount();
+      
+      // admin only
+    if (user.value.is_admin) {
       fetchUnreadOrders();
       fetchUnreadMessages();
 
       // auto refresh
       setInterval(fetchUnreadOrders, 5000);
       setInterval(fetchUnreadMessages, 10000);
-
+    }
       // listeners
       window.addEventListener('orders-updated', fetchUnreadOrders);
       window.addEventListener('cart-count-updated', (e) => {
@@ -304,6 +310,7 @@ export default {
     };
 
     const fetchUnreadOrders = async () => {
+      if (!user.value || !user.value.is_admin) return;
       try {
         const res = await api.get('/admin/orders/unread-count');
         unreadCount.value = res.data.count || 0;
@@ -312,6 +319,7 @@ export default {
       }
     };
     const fetchUnreadMessages = async () => {
+      if (!user.value || !user.value.is_admin) return;
         try {
           const res = await api.get('/messages/unread-count');
           unreadMessages.value = res.data;
