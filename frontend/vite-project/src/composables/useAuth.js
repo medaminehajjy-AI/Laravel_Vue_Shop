@@ -11,7 +11,7 @@ export function useAuth() {
 
     async function fetchUser() {
         try {
-            const response = await api.get('api/user');
+            const response = await api.get('/user');
             user.value = response.data;
             console.log('fetchUser success:', user.value);
             return user.value;
@@ -30,7 +30,7 @@ export function useAuth() {
         loading.value = true;
         try {
             await authAxios.get('/sanctum/csrf-cookie');
-            const response = await authAxios.post('api/login', { email, password });
+            const response = await authAxios.post('/login', { email, password });
             const newUser = await fetchUser();
             return { success: true, user: newUser };
         } catch (error) {
