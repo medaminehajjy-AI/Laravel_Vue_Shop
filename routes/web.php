@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 
 Route::post('/login', [AuthController::class, 'login'])
-    ->middleware(EnsureFrontendRequestsAreStateful::class);
+    ->middleware(EnsureFrontendRequestsAreStateful::class)->name('login');
 
 Route::post('/register', [AuthController::class, 'register'])
     ->middleware(EnsureFrontendRequestsAreStateful::class);
