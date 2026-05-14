@@ -16,6 +16,7 @@ const api = axios.create({
 const authAxios = axios.create({
     baseURL: API_BASE,
     withCredentials: true,
+    withXSRFToken: true,
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
 });
