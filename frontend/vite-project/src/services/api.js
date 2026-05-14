@@ -8,7 +8,6 @@ const api = axios.create({
     baseURL: `${API_BASE}/api`,
     withCredentials: true,
     xsrfCookieName: 'XSRF-TOKEN',
-    withXSRFToken: true,
     xsrfHeaderName: 'X-XSRF-TOKEN',
 });
 
@@ -16,7 +15,6 @@ const api = axios.create({
 const authAxios = axios.create({
     baseURL: API_BASE,
     withCredentials: true,
-    withXSRFToken: true,
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
 });
