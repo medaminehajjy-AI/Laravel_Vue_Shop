@@ -7,7 +7,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://laravel-vue-shop-sehf-dg8fi2gjb-medaminehajjy-ais-projects.vercel.app/',
+        'https://laravel-vue-shop-sehf-nhieh246z-medaminehajjy-ais-projects.vercel.app/',
         'http://localhost:5173',
     ],
 
