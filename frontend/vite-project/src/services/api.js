@@ -27,9 +27,10 @@ async function refreshCsrfToken() {
     }
 
     csrfPromise = authAxios.get('/sanctum/csrf-cookie', {
-        withCredentials: true,
+        withCredentials: true,    
     }).then(() => {
-        return Cookies.get('XSRF-TOKEN');
+    console.log('XSRF cookie:', Cookies.get('XSRF-TOKEN'));
+    return Cookies.get('XSRF-TOKEN');    
     }).finally(() => {
         csrfPromise = null;
     });
@@ -43,6 +44,7 @@ api.interceptors.request.use(async (config) => {
     }
 
     const token = Cookies.get('XSRF-TOKEN');
+    console.log('Interceptor token:', token);
     if (token) {
         config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
     }

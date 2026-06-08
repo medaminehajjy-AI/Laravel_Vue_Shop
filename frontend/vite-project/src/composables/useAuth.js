@@ -47,7 +47,8 @@ export function useAuth() {
     async function register(name, email, password, password_confirmation) {
         loading.value = true;
         try {
-            await authAxios.get('/sanctum/csrf-cookie');
+            await authAxios.get('/sanctum/csrf-cookie',{
+                withCredentials: true});
             const response = await authAxios.post('/register', { name, email, password, password_confirmation });
             const newUser = await fetchUser();
             return { success: true, user: newUser };
@@ -65,7 +66,8 @@ export function useAuth() {
     async function logout() {
         loading.value = true;
         try {
-            await authAxios.get('/sanctum/csrf-cookie');
+            await authAxios.get('/sanctum/csrf-cookie',{
+                withCredentials: true});
             await authAxios.post('/logout');
         } catch (error) {
             console.error('Logout error:', error);
