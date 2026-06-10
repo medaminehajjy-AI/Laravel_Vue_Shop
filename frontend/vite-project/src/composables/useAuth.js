@@ -31,8 +31,6 @@ export function useAuth() {
         try {
             await authAxios.get('/sanctum/csrf-cookie',{
                 withCredentials: true});
-                console.log('Posting login...');
-                console.log('authAxios defaults', authAxios.defaults.withCredentials);
             const response = await authAxios.post('/login', { email, password });
             const newUser = await fetchUser();
             return { success: true, user: newUser };
