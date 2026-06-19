@@ -24,11 +24,11 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        auth()->login($user);
-        $request->session()->regenerate();
+        $token = $user->createToken('spa-token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
+            'token' => $token,
             'message' => 'Registration successful'
         ], 201);
     }
@@ -46,12 +46,13 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $request->session()->regenerate();
-
         $user = User::find(auth()->id());
+
+        $token = $user->createToken('spa-token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
+            'token' => $token,
             'message' => 'Login successful'
         ]);
     }
