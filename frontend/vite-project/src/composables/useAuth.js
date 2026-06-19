@@ -28,12 +28,22 @@ export function useAuth() {
 
     async function login(email, password) {
         loading.value = true;
+
         try {
-            await authAxios.get('/sanctum/csrf-cookie',{
-                withCredentials: true});
-            const response = await authAxios.post('/login', { email, password });
-            const newUser = await fetchUser();
-            return { success: true, user: newUser };
+            const response = await authAxios.post('/login', {
+                email,
+                password
+            });
+
+            localStorage.setItem('token', response.data.token);
+
+            user.value = response.data.user;
+
+            return {
+                success: true,
+                user: response.data.user
+            };
+
         } catch (error) {
             return {
                 success: false,
