@@ -4,10 +4,18 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const api = axios.create({
     baseURL: `${API_BASE}/api`,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
 });
 
 const authAxios = axios.create({
-    baseURL: API_BASE,
+    baseURL: `${API_BASE}/api`,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
 });
 
 api.interceptors.request.use((config) => {

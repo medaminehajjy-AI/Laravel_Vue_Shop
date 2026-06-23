@@ -27,24 +27,24 @@ export function useAuth() {
     }
 
     async function login(email, password) {
-        loading.value = true;
+    loading.value = true;
 
-        try {
-            const response = await authAxios.post('/login', {
-                email,
-                password
-            });
+    try {
+        const response = await authAxios.post('/login', {
+            email,
+            password
+        });
 
-            localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.token);
 
-            user.value = response.data.user;
+        user.value = response.data.user;
 
-            return {
-                success: true,
-                user: response.data.user
-            };
+        return {
+            success: true,
+            user: response.data.user
+        };
 
-        } catch (error) {
+    } catch (error) {
             return {
                 success: false,
                 message: error.response?.data?.message || 'Login failed'
@@ -55,30 +55,49 @@ export function useAuth() {
     }
 
     async function register(name, email, password, password_confirmation) {
-        loading.value = true;
-        try {
-            await authAxios.get('/sanctum/csrf-cookie',{
-                withCredentials: true});
-            const response = await authAxios.post('/register', { name, email, password, password_confirmation });
-            const newUser = await fetchUser();
-            return { success: true, user: newUser };
-        } catch (error) {
-            if (error.response?.status === 422) {
-                const errors = error.response.data.errors;
-                return { success: false, message: Object.values(errors).flat().join(', ') };
+    loading.value = true;
+
+    try {
+        const response = await authAxios.post('/register', {
+            name,
+            email,
+            password,
+            password_confirmation
+        });
+
+        localStorage.setItem('token', response.data.token);
+
+        user.value = response.data.user;
+
+        return {
+            success: true,
+            user: response.data.user
+        };
+
+    } catch (error) {
+        if (error.response?.status === 422) {
+            const errors = error.response.data.errors;
+            return {
+                success: false,
+                message: Object.values(errors).flat().join(', ')
+            };
             }
-            return { success: false, message: 'Registration failed' };
-        } finally {
+
+            return {
+                success: false,
+                message: 'Registration failed'
+            };
+    } finally {
             loading.value = false;
         }
     }
 
     async function logout() {
         loading.value = true;
+
         try {
-            await authAxios.get('/sanctum/csrf-cookie',{
-                withCredentials: true});
-            await authAxios.post('/logout');
+            await api.post('/logout');
+            localStorage.removeItem('token');
         } catch (error) {
             console.error('Logout error:', error);
         } finally {

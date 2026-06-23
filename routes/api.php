@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\DebugController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\Api\MessageController;
 
 
@@ -35,6 +34,9 @@ Route::get('/products/search', [ProductController::class, 'search']);
 // Public route to submit form
 Route::post('/contact', [MessageController::class, 'store']);
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/home-products', [ProductController::class, 'homeProducts']);
@@ -46,7 +48,8 @@ Route::get('/categories/{category}', [CategoryController::class, 'show']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-
+    
+    Route::post('/logout', [AuthController::class, 'logout']);
     // Cart
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
