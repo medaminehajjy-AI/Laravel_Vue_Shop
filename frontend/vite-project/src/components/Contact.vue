@@ -145,30 +145,7 @@ export default {
 }
 </script>
 
-<style scoped>/*
- .form-contact {
-  text-align: center;
-  padding: 60px;
-  background: white;
-  border-radius: 12px;
-}
-
- .form-contact p {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.form-contact button {
-  padding: 12px 30px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-*/
+<style scoped>
 
 
 .contact-page {

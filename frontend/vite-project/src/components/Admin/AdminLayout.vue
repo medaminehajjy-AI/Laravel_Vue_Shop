@@ -10,7 +10,24 @@
     </div>
     
     <div v-else class="admin-layout">
-    <aside class="sidebar">
+
+      <button class="menu-toggle" @click="sidebarOpen = true">
+        ☰
+      </button>
+
+      <div
+        v-if="sidebarOpen"
+        class="sidebar-overlay"
+        @click="sidebarOpen = false"
+      ></div>
+    <aside class="sidebar" :class="{ open: sidebarOpen }">
+
+      <button
+        class="close-btn"
+        @click="sidebarOpen = false"
+      >
+        ✕
+      </button>
       <div class="sidebar-header">
         <h3>Admin Panel</h3>
       </div>
@@ -61,9 +78,9 @@ export default {
   setup() {
     const router = useRouter();
     const { user, isAuthenticated, isAdmin, logout } = useAuth();
-    
     const loading = ref(false);
-    
+    const sidebarOpen = ref(window.innerWidth > 768);
+
     watch(() => user.value, (newUser) => {
       if (!newUser) {
         router.push('/login');
@@ -86,6 +103,7 @@ export default {
       isAuthenticated,
       isAdmin,
       loading,
+      sidebarOpen,
       handleLogout,
       goHome
     };
@@ -217,5 +235,71 @@ export default {
   background: #f3f4f6;
 }
 
+/* menu toggle*/ 
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1200;
+  background: #1c155b;
+  color: white;
+  border: none;
+  font-size: 26px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
+.close-btn {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width:768px) {
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    top: 0;
+    height: 100vh;
+    z-index: 1100;
+    transition: left .3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .close-btn {
+    display: block;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 1000;
+  }
+
+  .main-content {
+    padding: 70px 15px 15px;
+  }
+}
 </style>
