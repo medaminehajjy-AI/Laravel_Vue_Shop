@@ -253,7 +253,8 @@ export default {
   margin-bottom: 40px;
 
   width: 100%;              
-  height: 330px;             
+  min-height: 330px;
+  padding: 40px 0;             
   background-size: cover;    
   background-position: center;
   display: flex;

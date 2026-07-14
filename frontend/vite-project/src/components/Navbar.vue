@@ -145,6 +145,31 @@
     <!-- Mobile Menu -->
     <Transition name="mobile-menu">
       <div v-if="showMobileMenu" class="mobile-menu">
+          <!--Begin of the section of Mobile Search -->
+          <div class="mobile-search">
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="Search products..."
+              class="search-input"
+            />
+
+            <div
+              v-if="searchQuery && searchResults.length > 0"
+              class="search-dropdown mobile-dropdown"
+            >
+              <div
+                v-for="item in searchResults"
+                :key="item.id"
+                class="search-item"
+                @click="goToProduct(item.id)"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </div>
+         <!-- End of the section of Mobile Search -->
+
         <router-link to="/" class="mobile-link" @click="closeMobileMenu">
           <Home :size="20" />
           <span>Home</span>
@@ -157,6 +182,7 @@
           <Mail :size="20" />
           <span>Contact</span>
         </router-link>
+        
         <template v-if="isAuthenticated">
           <router-link to="/cart" class="mobile-link" @click="closeMobileMenu">
             <ShoppingCart :size="20" />
@@ -407,6 +433,17 @@ export default {
 
 <style scoped>
 /*Search bar*/ 
+.mobile-search {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobile-dropdown {
+  position: static;
+  margin-top: 10px;
+}
 /* Search Container */
 .nav-search {
   position: relative;
@@ -415,6 +452,7 @@ export default {
 
 /* Input */
 .search-input {
+  box-sizing: border-box;
   width: 100%;
   padding: 10px 14px 10px 40px;
   border: 1px solid #e5e7eb;
