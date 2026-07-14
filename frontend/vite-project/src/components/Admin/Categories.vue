@@ -29,8 +29,10 @@
           <td>{{ category.slug }}</td>
           <td>{{ category.products_count || 0 }}</td>
           <td>
+            <div class="button-container"> 
             <button @click="openForm(category)" class="btn-edit">Edit</button>
             <button @click="deleteCategory(category.id)" class="btn-delete">Delete</button>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -144,6 +146,9 @@ export default {
 </script>
 
 <style scoped>
+.button-container {
+    display: flex;
+}
 .categories-management {
   max-width: 1000px;
 }

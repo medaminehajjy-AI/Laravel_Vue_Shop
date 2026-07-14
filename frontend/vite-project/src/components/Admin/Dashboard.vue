@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <h1>Statistics</h1>
+    <h2><ChartNoAxesCombined :size="24"/> Statistics</h2>
     
     <div v-if="loading" class="loading">
       <Loader2 class="animate-spin" :size="40" />
@@ -48,6 +48,7 @@
       </div>
     </div>
          <br>
+         <hr>
          <div class="dashboard-bottom">
           <RevenueChart />
           <div class="recent-orders">
@@ -89,13 +90,13 @@
 <script>
 import TopProductsChart from './TopProductsChart.vue';
 import RevenueChart from './RevenueChart.vue';
-import { Package, ShoppingCart, Users, DollarSign, Loader2 } from 'lucide-vue-next';
+import { ChartNoAxesCombined, Package, ShoppingCart, Users, DollarSign, Loader2 } from 'lucide-vue-next';
 import api from '../../services/api';
 import { useAuth } from '../../composables/useAuth';
 
 export default {
   name: 'Dashboard',
-  components: { Package, ShoppingCart, Users, DollarSign, Loader2 ,RevenueChart ,
+  components: { ChartNoAxesCombined, Package, ShoppingCart, Users, DollarSign, Loader2 ,RevenueChart ,
   TopProductsChart},
   data() {
     return {

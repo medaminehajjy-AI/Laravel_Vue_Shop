@@ -33,23 +33,23 @@
       </div>
       <nav class="sidebar-nav">
         <router-link to="/admin/dashboard" class="nav-item">
-          <span class="nav-icon">📊</span>
+          <span class="nav-icon"><ChartLine /></span>
           <span>Dashboard</span>
         </router-link>
         <router-link to="/admin/products" class="nav-item">
-          <span class="nav-icon">📦</span>
+          <span class="nav-icon"><Boxes /></span>
           <span>Products</span>
         </router-link>
         <router-link to="/admin/orders" class="nav-item">
-          <span class="nav-icon">🛒</span>
+          <span class="nav-icon"><ListOrdered /></span>
           <span>Orders</span>
         </router-link>
         <router-link to="/admin/categories" class="nav-item">
-          <span class="nav-icon">📁</span>
+          <span class="nav-icon"><Network /></span>
           <span>Categories</span>
         </router-link>
         <router-link to="/admin/messages" class="nav-item">
-          <span class="nav-icon">✉️</span>
+          <span class="nav-icon"><Mail /></span>
           <span>Messages</span>
         </router-link>
       </nav>
@@ -72,9 +72,11 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../../composables/useAuth';
+import { ChartLine, Boxes, ListOrdered, Network, Mail } from 'lucide-vue-next';
 
 export default {
   name: 'AdminLayout',
+  components: {ChartLine, Boxes, ListOrdered, Network, Mail},
   setup() {
     const router = useRouter();
     const { user, isAuthenticated, isAdmin, logout } = useAuth();
