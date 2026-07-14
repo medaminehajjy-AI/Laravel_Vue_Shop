@@ -424,7 +424,14 @@ h1 {
   min-width: 280px;
 }
 
-.search-input,
+.search-input {
+  width: 89%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
 .filter-select,
 .price-input {
   width: 100%;

@@ -239,7 +239,7 @@ export default {
 .menu-toggle {
   display: none;
   position: fixed;
-  top: 15px;
+  top: 6px;
   left: 15px;
   z-index: 1200;
   background: #1c155b;

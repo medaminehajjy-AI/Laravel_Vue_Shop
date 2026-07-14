@@ -20,19 +20,41 @@ onMounted(async () => {
     const totals = data.map(item => item.total)
 
     new Chart(chartCanvas.value, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Monthly Revenue',
-            data: totals,
-            borderWidth: 2,
-            tension: 0.3
-          }
-        ]
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Monthly Revenue',
+        data: totals,
+        borderWidth: 2,
+        tension: 0.3,
+        fill: false
       }
-    })
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    plugins: {
+      legend: {
+        position: 'top'
+      }
+    },
+
+    scales: {
+      x: {
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: window.innerWidth < 768 ? 4 : 10,
+          maxRotation: 0,
+          minRotation: 0
+        }
+      }
+    }
+  }
+})
   } catch (error) {
     console.error('Chart API error:', error.response?.data || error.message)
   }
@@ -44,5 +66,14 @@ onMounted(async () => {
   background: white;
   padding: 20px;
   border-radius: 10px;
+  height: 350px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+    padding: 10px;
+  }
 }
 </style>
