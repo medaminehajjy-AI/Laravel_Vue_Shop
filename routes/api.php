@@ -5,22 +5,11 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ContactController;
-use App\Http\Controllers\Api\DebugController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\MessageController;
-
-
-
-
-Route::get('/test123', function () {
-    return 'HELLO_FROM_NEW_DEPLOYMENT';
-});
-
-Route::get('/cors-debug', function () {
-    return response()->json(['cors' => 'ok']);
-});
+//use App\Http\Controllers\Api\DebugController;
 
 
 

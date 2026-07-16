@@ -74,7 +74,7 @@
             </div>
 
           <!-- User Menu -->
-          <div class="dropdown-wrapper" v-click-outside="closeUserMenu">
+          <div class="dropdown-wrapper" v-click-outside="closeUserMenu">    
             <button class="user-button" @click="toggleUserMenu">
               <div class="avatar-wrapper">
                 <img 
@@ -675,6 +675,7 @@ export default {
 /* Dropdown Wrapper */
 .dropdown-wrapper {
   position: relative;
+  margin-left: 9px;
 }
 
 /* User Button */
