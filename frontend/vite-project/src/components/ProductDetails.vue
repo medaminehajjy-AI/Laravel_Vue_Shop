@@ -8,6 +8,14 @@
     </div>
     
     <div v-else class="product-content">
+        
+        <div v-if="success" class="success-message">
+          ✓ {{ successMessage }}
+        </div>
+        <div v-if="error" class="error-message">
+          ✗ {{ errorMessage }}
+        </div>
+
       <button @click="$router.push('/')" class="btn-back">← Back</button>
       
       <div class="product-container">
@@ -76,6 +84,11 @@ export default {
     const loading = ref(false);
     const quantity = ref(1);
 
+    const success = ref(false);
+    const successMessage = ref('');
+    const error = ref(false);
+    const errorMessage = ref('');
+
     const fetchProduct = async (id) => {
       loading.value = true;
       try {
@@ -98,25 +111,46 @@ export default {
     });
       
     const addToCart = async () => {
+      success.value = false;
+      error.value = false;
+
       if (!user.value) {
-        alert('Please login to add items to cart');
+        error.value = true;
+        errorMessage.value = 'Please login to add items to cart.';
         router.push('/login');
         return;
       }
+
       try {
-        await api.post('/cart', { 
-          product_id: product.value.id, 
-          quantity: quantity.value 
+        await api.post('/cart', {
+          product_id: product.value.id,
+          quantity: quantity.value
         });
-        
+
         const countResponse = await api.get('/cart/count');
-        window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: countResponse.data.count || 0 }));
-        
-        alert('Product added to cart!');
-        router.push('/cart');
+        window.dispatchEvent(
+          new CustomEvent('cart-count-updated', {
+            detail: countResponse.data.count || 0
+          })
+        );
+
+        success.value = true;
+        successMessage.value = 'Product added to cart successfully!';
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+        setTimeout(() => {
+          router.push('/cart');
+        }, 1500);
+
       } catch (error) {
-        console.error('Failed to add to cart:', error);
-        alert('Failed to add to cart');
+        console.error(error);
+
+        error.value = true;
+        errorMessage.value = 'Failed to add product to cart.';
       }
     };
 
@@ -131,13 +165,36 @@ export default {
       addToCart,
       handleImageError,
       isAuthenticated,
-      user
+      user,
+      success,
+      successMessage,
+      error,
+      errorMessage
     };
   }
 }
 </script>
 
 <style scoped>
+.success-message {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+
 .product-details {
   padding: 20px;
   max-width: 1200px;

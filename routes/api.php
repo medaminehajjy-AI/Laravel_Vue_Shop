@@ -20,7 +20,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/products/search', [ProductController::class, 'search']);
-// Public route to submit form
+
 Route::post('/contact', [MessageController::class, 'store']);
 
 Route::post('/login', [AuthController::class, 'login']);

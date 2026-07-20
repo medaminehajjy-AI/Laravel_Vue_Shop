@@ -1,5 +1,13 @@
 <template>
   <div class="checkout-page">
+      
+      <div v-if="success" class="success-message">
+        ✓ {{ successMessage }}
+      </div>
+      <div v-if="error" class="error-message">
+        ✗ {{ errorMessage }}
+      </div>
+
     <h1>Checkout</h1>
     
     <div v-if="loading" class="loading">Loading...</div>
@@ -9,7 +17,7 @@
       <button @click="$router.push('/')">Continue Shopping</button>
     </div>
     
-    <div v-else class="checkout-content">
+    <div v-else class="checkout-content"> 
       <div class="checkout-items">
         <h2>Order Summary</h2>
         <div class="items-list">
@@ -106,6 +114,11 @@ export default {
     const loading = ref(false);
     const processing = ref(false);
 
+    const success = ref(false);
+    const successMessage = ref('');
+    const error = ref(false);
+    const errorMessage = ref('');
+
     const total = computed(() => {
       return cartItems.value.reduce((sum, item) => {
         return sum + ((item.product?.price || 0) * item.quantity);
@@ -135,37 +148,67 @@ export default {
     });
 
     const placeOrder = async () => {
-      if (!phone.value || !shippingAddress.value) {
-        alert('Please fill all required fields.');
-        return;
-      }
-      
-      processing.value = true;
-      try {
-        const response = await api.post('/checkout', {
-          phone: phone.value,
-          shipping_address: shippingAddress.value,
-          notes: notes.value,
-          cart_items: cartItems.value,
-          total_amount: total.value,
-          payment_method: paymentMethod.value
-        });
+        success.value = false;
+        error.value = false;
 
-        cartItems.value = [];
-        window.dispatchEvent(new CustomEvent('cart-count-updated', {
-          detail: 0
-        }));
-        window.dispatchEvent(new Event('orders-updated'));
-        alert(response.data.message);
+        if (!phone.value || !shippingAddress.value) {
+          error.value = true;
+          errorMessage.value = 'Please fill all required fields.';
 
-        router.push('/');
-      } catch (error) {
-        console.error('Checkout failed:', error);
-        alert(error.response?.data?.message || 'Checkout failed. Please try again.');
-      } finally {
-        processing.value = false;
-      }
-    };
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+          return;
+        }
+
+        processing.value = true;
+
+        try {
+          const response = await api.post('/checkout', {
+            phone: phone.value,
+            shipping_address: shippingAddress.value,
+            notes: notes.value,
+            cart_items: cartItems.value,
+            total_amount: total.value,
+            payment_method: paymentMethod.value
+          });
+
+          cartItems.value = [];
+
+          window.dispatchEvent(new CustomEvent('cart-count-updated', {
+            detail: 0
+          }));
+
+          window.dispatchEvent(new Event('orders-updated'));
+
+          success.value = true;
+          successMessage.value = response.data.message;
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+
+          setTimeout(() => {
+            router.push('/');
+          }, 2000);
+
+        } catch (err) {
+          console.error(err);
+
+          error.value = true;
+          errorMessage.value =
+            err.response?.data?.message || 'Checkout failed. Please try again.';
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        } finally {
+          processing.value = false;
+        }
+      };
 
     const handleImageError = (event) => {
       event.target.src = '/placeholder.png';
@@ -181,13 +224,37 @@ export default {
       processing,
       total,
       placeOrder,
-      handleImageError
+      handleImageError,
+      paymentMethod,
+      success,
+      successMessage,
+      error,
+      errorMessage
     };
   }
 }
 </script>
 
 <style scoped>
+.success-message {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+
 .toggle-header {
     display: flex;
     align-items: center;

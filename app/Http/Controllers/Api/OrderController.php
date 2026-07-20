@@ -24,12 +24,13 @@ class OrderController extends Controller
     public function checkout(Request $request)
     {
         $request->validate([
-        'phone' => 'required|string',
-        'shipping_address' => 'required|string',
-        'cart_items' => 'required|array',
-        'total_amount' => 'required|numeric',
-        'payment_method' => 'required|in:cod,online',
-    ]);
+            'phone' => 'required|string',
+            'shipping_address' => 'required|string',
+            'cart_items' => 'required|array',
+            'total_amount' => 'required|numeric',
+            'payment_method' => 'required|in:cod,online',
+        ]);
+
         $cartItems = Cart::with('product')
             ->where('user_id', $request->user()->id)
             ->get();
@@ -40,6 +41,18 @@ class OrderController extends Controller
 
         try {
             $order = DB::transaction(function () use ($request, $cartItems) {
+
+                // Check stock before creating the order
+                foreach ($cartItems as $item) {
+                    if (!$item->product) {
+                        throw new \Exception("A product no longer exists.");
+                    }
+
+                    if ($item->product->stock < $item->quantity) {
+                        throw new \Exception("Not enough stock for {$item->product->name}.");
+                    }
+                }
+
                 $totalPrice = $cartItems->sum(function ($item) {
                     return $item->product->price * $item->quantity;
                 });
@@ -47,25 +60,28 @@ class OrderController extends Controller
                 $order = Order::create([
                     'user_id' => $request->user()->id,
                     'total_price' => $totalPrice,
-
                     'phone' => $request->phone,
                     'shipping_address' => $request->shipping_address,
                     'notes' => $request->notes,
                     'payment_method' => $request->payment_method,
                     'status' => $request->payment_method === 'cod' ? 'pending' : 'paid',
                     'is_read' => 0,
-                    
                 ]);
 
                 foreach ($cartItems as $item) {
+
                     OrderItem::create([
                         'order_id' => $order->id,
                         'product_id' => $item->product_id,
                         'quantity' => $item->quantity,
                         'price' => $item->product->price,
                     ]);
+
+                    // Reduce stock
+                    $item->product->decrement('stock', $item->quantity);
                 }
 
+                // Clear cart
                 Cart::where('user_id', $request->user()->id)->delete();
 
                 return $order;
@@ -75,8 +91,11 @@ class OrderController extends Controller
                 'message' => 'Order placed successfully',
                 'order' => $order
             ], 201);
+
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Checkout failed: ' . $e->getMessage()], 500);
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
         }
     }
 

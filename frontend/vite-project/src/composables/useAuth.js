@@ -13,7 +13,7 @@ export function useAuth() {
         try {
             const response = await api.get('/user');
             user.value = response.data;
-            console.log('fetchUser success:', user.value);
+            //console.log('fetchUser success:', user.value);
             return user.value;
         } catch (error) {
             // IMPORTANT
@@ -21,7 +21,7 @@ export function useAuth() {
                     user.value = null;
                     return;
                 }
-            console.log('fetchUser failed:', error.response?.status);
+            //console.log('fetchUser failed:', error.response?.status);
             return null;
         }
     }

@@ -11,7 +11,7 @@
         
         <div v-if="success" class="success-message">
           <CheckCircle :size="24" />
-          <span>Thank you! Your message has been sent.</span>
+          <span>{{ successMessage }}</span>
         </div>
 
        <!-- <div v-else-if="!isAuthenticated" class="form-contact">
@@ -19,7 +19,7 @@
           <button @click="$router.push('/login')">Login</button>
         </div> -->
 
-        <form v-else @submit.prevent="submitForm" class="contact-form">
+        <form @submit.prevent="submitForm" class="contact-form">
           <div class="form-group">
             <label>Your Name</label>
             <input 
@@ -121,23 +121,49 @@ export default {
       },
       errors: {},
       loading: false,
-      success: false
+      success: false,
+      successMessage: ''
+      
     }
   },
   methods: {
     async submitForm() {
       this.loading = true;
+      this.errors = {};
+      this.success = false;
+      this.successMessage = '';
+
       try {
         const res = await api.post('/contact', this.form);
-        alert(res.data.message);
-        this.form = { name:'', email:'', subject:'', message:'' };
+          
+        if (res.data.status === 'success') {
+          this.success = true;
+          this.successMessage = res.data.message;
+
+          this.form = {
+            name: '',
+            email: '',
+            subject: '',
+            message: ''
+          };
+             window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+            setTimeout(() => {
+              this.success = false;
+              this.successMessage = '';
+            }, 5000);
+        }
       } catch (err) {
-        if (err.response && err.response.status === 422) {
+        if (err.response?.status === 422) {
           this.errors = err.response.data.errors;
         } else {
-          alert('Something went wrong!');
+          this.errors = {
+            general: ['Something went wrong. Please try again later.']
+          };
         }
-      }finally {
+      } finally {
         this.loading = false;
       }
     }

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -19,9 +19,12 @@ class ContactController extends Controller
 
         Contact::create($validated);
 
-        return response()->json(['message' => 'Message sent successfully!'], 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Your message has been sent!'
+        ], 200);
     }
-
+   */
     public function index()
     {
         $contacts = Contact::orderBy('created_at', 'desc')->get();
