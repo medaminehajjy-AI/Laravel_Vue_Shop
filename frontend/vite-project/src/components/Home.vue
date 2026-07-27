@@ -114,7 +114,7 @@ export default {
         const response = await api.get('/home-products', {
           params: { page: page }
         });
-        console.log("API RESPONSE:", response.data);
+        //console.log("API RESPONSE:", response.data);
         products.value = response.data.data;
         pagination.value = {
           current_page: response.data.current_page,
